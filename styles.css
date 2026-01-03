@@ -74,6 +74,29 @@ header h1 {
     margin-bottom: 30px;
 }
 
+/* Scrollbar styling for webkit browsers */
+.habits-grid::-webkit-scrollbar,
+.progress-section::-webkit-scrollbar {
+    height: 8px;
+}
+
+.habits-grid::-webkit-scrollbar-track,
+.progress-section::-webkit-scrollbar-track {
+    background: #e0e0e0;
+    border-radius: 4px;
+}
+
+.habits-grid::-webkit-scrollbar-thumb,
+.progress-section::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 4px;
+}
+
+.habits-grid::-webkit-scrollbar-thumb:hover,
+.progress-section::-webkit-scrollbar-thumb:hover {
+    background: #764ba2;
+}
+
 .grid-header, .grid-subheader {
     display: grid;
     grid-template-columns: 250px repeat(7, 1fr);
@@ -235,14 +258,153 @@ header h1 {
     height: 100%;
 }
 
-@media (max-width: 768px) {
+/* Tablet responsiveness */
+@media (max-width: 1024px) {
+    .habit-tracker {
+        padding: 20px;
+    }
+
     .grid-header, .grid-subheader, .habit-row, .progress-header, .progress-row {
-        grid-template-columns: 150px repeat(7, 1fr);
+        grid-template-columns: 180px repeat(7, 1fr);
+        gap: 8px;
+    }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    header {
+        padding: 20px 15px;
+    }
+
+    header h1 {
+        font-size: 1.8em;
+        margin-bottom: 10px;
+    }
+
+    .week-selector {
+        gap: 15px;
+    }
+
+    .week-nav {
+        padding: 6px 12px;
+        font-size: 1em;
+    }
+
+    #weekDisplay {
+        font-size: 1em;
+        min-width: 80px;
+    }
+
+    .habit-tracker {
+        padding: 15px;
+    }
+
+    .habits-grid, .progress-section {
+        padding: 15px;
+        margin-bottom: 20px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        position: relative;
+    }
+
+    /* Scroll hint gradient */
+    .habits-grid::after,
+    .progress-section::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 30px;
+        background: linear-gradient(to left, rgba(245, 245, 245, 0.9), transparent);
+        pointer-events: none;
+        border-radius: 0 8px 8px 0;
+    }
+
+    .grid-header, .grid-subheader, .habit-row {
+        grid-template-columns: 140px repeat(7, 50px);
         gap: 5px;
+        min-width: fit-content;
+    }
+
+    .progress-header, .progress-row {
+        grid-template-columns: 100px repeat(7, 50px);
+        gap: 5px;
+        min-width: fit-content;
     }
 
     .habit-label {
-        font-size: 0.85em;
+        font-size: 0.75em;
+        padding-left: 5px;
+    }
+
+    .day-header, .day-number {
+        font-size: 0.75em;
+        padding: 3px;
+    }
+
+    .checkbox-cell input[type="checkbox"] {
+        width: 22px;
+        height: 22px;
+    }
+
+    .progress-label {
+        font-size: 0.8em;
+        padding-left: 5px;
+    }
+
+    .progress-day-header {
+        font-size: 0.75em;
+    }
+
+    .progress-value, .done-value, .notdone-value {
+        font-size: 0.8em;
+        padding: 5px 3px;
+    }
+
+    .chart-section {
+        height: 250px;
+        padding: 15px;
+    }
+}
+
+/* Very small mobile devices */
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+
+    .habit-tracker {
+        padding: 10px;
+    }
+
+    .habits-grid, .progress-section, .chart-section {
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+
+    .grid-header, .grid-subheader, .habit-row {
+        grid-template-columns: 120px repeat(7, 45px);
+        gap: 4px;
+    }
+
+    .progress-header, .progress-row {
+        grid-template-columns: 80px repeat(7, 45px);
+        gap: 4px;
+    }
+
+    .habit-label {
+        font-size: 0.7em;
+        padding-left: 3px;
+    }
+
+    .day-header, .day-number, .progress-day-header {
+        font-size: 0.7em;
+        padding: 2px;
     }
 
     .checkbox-cell input[type="checkbox"] {
@@ -250,7 +412,28 @@ header h1 {
         height: 20px;
     }
 
-    header h1 {
-        font-size: 1.8em;
+    .progress-label {
+        font-size: 0.75em;
+        padding-left: 3px;
+    }
+
+    .progress-value, .done-value, .notdone-value {
+        font-size: 0.75em;
+        padding: 4px 2px;
+    }
+
+    .chart-section {
+        height: 200px;
+        padding: 10px;
+    }
+
+    .week-nav {
+        padding: 5px 10px;
+        font-size: 0.9em;
+    }
+
+    #weekDisplay {
+        font-size: 0.9em;
+        min-width: 70px;
     }
 }
