@@ -131,16 +131,18 @@ header h1 {
 
 #weekDisplay {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text-primary);
-    padding: 12px 24px;
+    padding: 10px 16px;
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 4px;
-    min-width: 140px;
+    min-width: 160px;
+    text-align: center;
+    line-height: 1.4;
 }
 
 /* Main Content */
