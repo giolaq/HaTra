@@ -125,21 +125,32 @@ function updateProgress() {
     }
 }
 
-// Draw progress chart
+// Draw progress chart - Neo-Terminal Theme
 function drawChart() {
     const canvas = document.getElementById('progressChart');
     const ctx = canvas.getContext('2d');
 
     // Set canvas size
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    canvas.width = canvas.offsetWidth * 2;
+    canvas.height = canvas.offsetHeight * 2;
+    ctx.scale(2, 2);
 
-    const width = canvas.width;
-    const height = canvas.height;
-    const padding = 40;
+    const width = canvas.offsetWidth;
+    const height = canvas.offsetHeight;
+    const padding = 45;
+
+    // Theme colors
+    const colors = {
+        bg: '#12121a',
+        grid: 'rgba(0, 245, 212, 0.1)',
+        text: '#888899',
+        accent: '#00f5d4',
+        accentGlow: 'rgba(0, 245, 212, 0.3)'
+    };
 
     // Clear canvas
-    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = colors.bg;
+    ctx.fillRect(0, 0, width, height);
 
     // Calculate progress for each day
     const progressData = [];
@@ -154,69 +165,82 @@ function drawChart() {
         progressData.push(progress);
     }
 
-    // Draw axes
-    ctx.strokeStyle = '#333';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(padding, padding);
-    ctx.lineTo(padding, height - padding);
-    ctx.lineTo(width - padding, height - padding);
-    ctx.stroke();
+    // Draw grid lines
+    ctx.strokeStyle = colors.grid;
+    ctx.lineWidth = 1;
 
-    // Draw y-axis labels
-    ctx.fillStyle = '#333';
-    ctx.font = '14px sans-serif';
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'middle';
-
-    const yLabels = [100, 50, 0, -50];
+    const yLabels = [100, 75, 50, 25, 0];
     yLabels.forEach(label => {
-        const y = padding + ((100 - label) / 150) * (height - 2 * padding);
-        ctx.fillText(`${label}%`, padding - 10, y);
-
-        // Draw grid line
-        ctx.strokeStyle = '#ddd';
-        ctx.lineWidth = 1;
+        const y = padding + ((100 - label) / 100) * (height - 2 * padding);
         ctx.beginPath();
         ctx.moveTo(padding, y);
         ctx.lineTo(width - padding, y);
         ctx.stroke();
     });
 
+    // Draw y-axis labels
+    ctx.fillStyle = colors.text;
+    ctx.font = '10px "Orbitron", sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+
+    yLabels.forEach(label => {
+        const y = padding + ((100 - label) / 100) * (height - 2 * padding);
+        ctx.fillText(`${label}%`, padding - 8, y);
+    });
+
     // Draw x-axis labels
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    const days = ['Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr'];
+    const days = ['SA', 'SU', 'MO', 'TU', 'WE', 'TH', 'FR'];
     const barWidth = (width - 2 * padding) / 7;
 
     days.forEach((day, i) => {
         const x = padding + (i + 0.5) * barWidth;
-        ctx.fillText(day, x, height - padding + 10);
+        ctx.fillText(day, x, height - padding + 8);
     });
 
-    // Draw bars
+    // Draw bars with glow effect
     progressData.forEach((progress, i) => {
-        const x = padding + i * barWidth + barWidth * 0.2;
-        const barW = barWidth * 0.6;
-        const maxBarHeight = (height - 2 * padding) * (100 / 150);
+        const x = padding + i * barWidth + barWidth * 0.15;
+        const barW = barWidth * 0.7;
+        const maxBarHeight = height - 2 * padding;
         const barHeight = (progress / 100) * maxBarHeight;
         const y = height - padding - barHeight;
 
-        // Gradient fill
-        const gradient = ctx.createLinearGradient(0, y, 0, height - padding);
-        gradient.addColorStop(0, '#667eea');
-        gradient.addColorStop(1, '#764ba2');
-
-        ctx.fillStyle = gradient;
-        ctx.fillRect(x, y, barW, barHeight);
-
-        // Draw percentage on top of bar
         if (progress > 0) {
-            ctx.fillStyle = '#333';
-            ctx.font = 'bold 12px sans-serif';
+            // Glow effect
+            ctx.shadowColor = colors.accent;
+            ctx.shadowBlur = 15;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+
+            // Bar with gradient
+            const gradient = ctx.createLinearGradient(0, y, 0, height - padding);
+            gradient.addColorStop(0, colors.accent);
+            gradient.addColorStop(1, 'rgba(0, 245, 212, 0.4)');
+
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.roundRect(x, y, barW, barHeight, 4);
+            ctx.fill();
+
+            // Reset shadow
+            ctx.shadowBlur = 0;
+
+            // Draw percentage on top
+            ctx.fillStyle = colors.accent;
+            ctx.font = 'bold 10px "Orbitron", sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'bottom';
-            ctx.fillText(`${Math.round(progress)}%`, x + barW / 2, y - 5);
+            ctx.fillText(`${Math.round(progress)}%`, x + barW / 2, y - 4);
+        } else {
+            // Empty bar outline
+            ctx.strokeStyle = 'rgba(0, 245, 212, 0.2)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.roundRect(x, padding, barW, maxBarHeight, 4);
+            ctx.stroke();
         }
     });
 }
